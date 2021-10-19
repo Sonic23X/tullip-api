@@ -14,23 +14,23 @@ class PrototipoController extends Controller
         $prototipos = null;
 
         if ($currentPage == '1') {
-            $prototipos = Prototipo::where('id_desarrollo', $desarrollo)
+            $prototipos = Prototipo::where('desarrollo_id', $desarrollo)
                                 ->select('id', 'nombre')
                                 ->limit($pageSize)
                                 ->get();
 
-            $totalItem = Prototipo::where('id_desarrollo', $desarrollo)
+            $totalItem = Prototipo::where('desarrollo_id', $desarrollo)
                                 ->limit($pageSize)
                                 ->count();
         }
         else {
-            $prototipos = Prototipo::where('id_desarrollo', $desarrollo)
+            $prototipos = Prototipo::where('desarrollo_id', $desarrollo)
                                 ->select('id', 'nombre')
                                 ->offset($pageSize * ($currentPage - 1))
                                 ->limit($pageSize)
                                 ->get();
 
-            $totalItem = Prototipo::where('id_desarrollo', $desarrollo)
+            $totalItem = Prototipo::where('desarrollo_id', $desarrollo)
                                 ->offset($pageSize * ($currentPage - 1))
                                 ->limit($pageSize)
                                 ->count();
@@ -55,7 +55,7 @@ class PrototipoController extends Controller
         $response = [
             'status' => true,
             'totalItem' => $totalItem,
-            'totalPage' => ceil(Prototipo::where('id_desarrollo', $desarrollo)->count() / $pageSize),
+            'totalPage' => ceil(Prototipo::where('desarrollo_id', $desarrollo)->count() / $pageSize),
             'pageSize' => $pageSize,
             'currentPage' => $currentPage,
             'data' => $prototipoArray,
@@ -79,8 +79,8 @@ class PrototipoController extends Controller
             "baños" => "numeric",
             "observaciones" => '',
             "precio" => "numeric",
-            "id_empresa" => "required"
-        ]), ['id_desarrollo' => $sembrado]));
+            "empresa_id" => "required"
+        ]), ['desarrollo_id' => $sembrado]));
 
         $i = 0;
         $image = "file_";
@@ -156,8 +156,8 @@ class PrototipoController extends Controller
 
     public function getPrototiposToClone($desarrollo, $empresa)
     {
-        $prototipos = Prototipo::where('id_empresa', $empresa)
-                            ->where('id_desarrollo', '<>', $desarrollo)
+        $prototipos = Prototipo::where('empresa_id', $empresa)
+                            ->where('desarrollo_id', '<>', $desarrollo)
                             ->select('id', 'nombre')
                             ->get();
 
@@ -177,8 +177,8 @@ class PrototipoController extends Controller
             'observaciones' => $prototipoClone->observaciones,
             'precio' => $prototipoClone->precio,
             'fotos' =>$prototipoClone->fotos,
-            'id_empresa' => $prototipoClone->id_empresa,
-            'id_desarrollo' => $desarrollo,
+            'empresa_id' => $prototipoClone->id_empresa,
+            'desarrollo_id' => $desarrollo,
         ]);
 
         return response()->json(['message' => '¡Prototipo clonado!'], 200);

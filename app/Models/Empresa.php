@@ -18,8 +18,24 @@ class Empresa extends Model
     protected $fillable = [
         'nombre', 
         'direccion', 
-        'admin', 
+        'user_id', 
         'days', 
         'email'
     ];
+
+    /**
+     * Get the admin
+     */
+    function admin()
+    {
+        return $this->hasOne('App\Models\User');
+    }
+
+    /**
+     * Get all the users
+     */
+    function users()
+    {
+        return $this->hasMany('App\Models\User', 'empresa_id');     
+    }
 }

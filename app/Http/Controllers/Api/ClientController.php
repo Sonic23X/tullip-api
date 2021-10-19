@@ -28,12 +28,12 @@ class ClientController extends Controller
     
     public function getClients($id_desarrollo, $pageSize, $currentPage, Request $request)
     {
-        $clients = Models\Cliente::where('id_desarrollo', $id_desarrollo)->orderBy('created_at', 'desc');
+        $clients = Models\Cliente::where('desarrollo_id', $id_desarrollo)->orderBy('created_at', 'desc');
         if ($request->input('nombre')) {
             $clients->where('nombre', 'like', "%{$request->input('nombre')}%");
         }
         if ($request->input('vendedor')) {
-            $clients->where('id_usuario', $request->input('vendedor'));
+            $clients->where('user_id', $request->input('vendedor'));
         }
         $totalItem = $clients->count();
         $currentPage=$currentPage + 1;
@@ -287,7 +287,7 @@ class ClientController extends Controller
         $prospect = Models\Cliente::where('hash', $hash)->first();
 
         $seguimento = Models\Seguimiento::where('id_cliente', $prospect->id)
-                        ->where('id_usuario', $id_user)
+                        ->where('user_id', $id_user)
                         ->where('tipo', '!=', 'tarea')
                         ->orderBy('created_at', 'DESC')
                         ->get();
@@ -296,7 +296,7 @@ class ClientController extends Controller
 
     public function getSeguimientoByUser($id_user)
     {
-        $seguimento = Models\Seguimiento::where('id_usuario',$id_user)
+        $seguimento = Models\Seguimiento::where('user_id',$id_user)
                         ->where('tipo','!=','tarea')
                         ->orderBy('created_at','DESC')
                         ->limit(10)
@@ -339,7 +339,7 @@ class ClientController extends Controller
         $customer = Models\Cliente::where('hash', $hash)->first();
         $tracking = $customer->trackings()
                         ->where('tipo', 'tarea')
-                        ->where('id_usuario', $id_user)
+                        ->where('user_id', $id_user)
                         ->orderBy('created_at','DESC')
                         ->get();
         return $tracking->load('cliente');
@@ -348,7 +348,7 @@ class ClientController extends Controller
     public function getTasksByUser($id_user)
     {
         $trackings = Models\Seguimiento::where('tipo', 'tarea')
-                        ->where('id_usuario', $id_user)
+                        ->where('user_id', $id_user)
                         ->where('completado', null )
                         ->orderBy('created_at','DESC')
                         ->get();
@@ -359,7 +359,7 @@ class ClientController extends Controller
     public function getTasksByAdmin( $empresa )
     {
         $trackings = Models\Seguimiento::where('tipo', 'tarea')
-                        ->where('id_empresa', $empresa)
+                        ->where('empresa_id', $empresa)
                         ->where('completado', null)
                         ->orderBy('created_at', 'DESC')
                         ->get();
@@ -454,11 +454,11 @@ class ClientController extends Controller
             $path = $file->storeAs("documents/{$prospect->id}", $request->input('nombre').'.'.$extension);
 
             $documentData = [
-                'id_cliente' => $prospect->id,
-                'id_usuario' => $id_user,
+                'cliente_id' => $prospect->id,
+                'user_id' => $id_user,
                 'nombre' => $request->input('nombre'),
                 'path'=> $path,
-                'id_empresa'=> $request->input('empresa')
+                'empresa_id'=> $request->input('empresa')
             ];
 
             $document = Models\Documento::create($documentData);
@@ -478,8 +478,8 @@ class ClientController extends Controller
         {
             case 'vendedor':
                 $cliente = Models\Cliente::where('validado', 1)
-                                ->where('id_usuario', $user->id)
-                                ->where('id_desarrollo', $desarrollo)
+                                ->where('user_id', $user->id)
+                                ->where('desarrollo_id', $desarrollo)
                                 ->select('id', 'nombre')
                                 ->get();
 
@@ -487,7 +487,7 @@ class ClientController extends Controller
                 break;
             case 'admin':
                 $cliente = Models\Cliente::where('validado', 1)
-                                        ->where('id_desarrollo', $desarrollo)
+                                        ->where('desarrollo_id', $desarrollo)
                                         ->select('id', 'nombre')
                                         ->get();
 
@@ -495,7 +495,7 @@ class ClientController extends Controller
                 break;
             case 'superadmin':
                 $cliente = Models\Cliente::where('validado', 1)
-                                        ->where('id_desarrollo', $desarrollo)
+                                        ->where('desarrollo_id', $desarrollo)
                                         ->select('id', 'nombre')
                                         ->get();
                 return response()->json( $cliente, 200 );

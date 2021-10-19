@@ -17,7 +17,7 @@ class CreateEmpresasTable extends Migration
             $table->id();
             $table->string('nombre')->unique();
             $table->string('direccion');
-            $table->integer('admin');
+            $table->integer('user_id');
             $table->integer('days');
             $table->string('email');
             $table->timestamps();

@@ -51,7 +51,7 @@ class TelemarketingController extends Controller
             $new_tracking->mensaje = '';
             $new_tracking->id_usuario =  $userId;
             $new_tracking->fecha = \Carbon\Carbon::now();
-            $new_tracking->id_empresa = $request->input('empresa');
+            $new_tracking->empresa_id = $request->input('empresa');
             $new_prospect->trackings()->save($new_tracking);
         }
 
@@ -75,31 +75,31 @@ class TelemarketingController extends Controller
 
     public function getClientes(Request $request, $empresa)
     {
-        $clientes_prospectos = Cliente::join('desarrollos', 'clientes.id_desarrollo', '=', 'desarrollos.id')
+        $clientes_prospectos = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
             ->where('clientes.condicion', 'prospecto')
             ->where('clientes.telemarketing',1)
-            ->where('clientes.id_empresa', $empresa)
+            ->where('clientes.empresa_id', $empresa)
             ->select('clientes.id','clientes.nombre as title','clientes.condicion as laneId','clientes.telemarketing', 'desarrollos.nombre as description')
             ->get();
 
-        $clientes_calificados = Cliente::join('desarrollos', 'clientes.id_desarrollo', '=', 'desarrollos.id')
+        $clientes_calificados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
             ->where('clientes.condicion', 'calificado')
             ->where('clientes.telemarketing',1)
-            ->where('clientes.id_empresa', $empresa )
+            ->where('clientes.empresa_id', $empresa )
             ->select('clientes.id','clientes.nombre as title','clientes.condicion as laneId','clientes.telemarketing', 'desarrollos.nombre as description')
             ->get();
 
-        $clientes_citados = Cliente::join('desarrollos', 'clientes.id_desarrollo', '=', 'desarrollos.id')
+        $clientes_citados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
             ->where('clientes.condicion', 'cita')
             ->where('clientes.telemarketing',1)
-            ->where('clientes.id_empresa', $empresa )
+            ->where('clientes.empresa_id', $empresa )
             ->select('clientes.id','clientes.nombre as title','clientes.condicion as laneId','clientes.telemarketing', 'desarrollos.nombre as description')
             ->get();
 
-        $clientes_cerrados = Cliente::join('desarrollos', 'clientes.id_desarrollo', '=', 'desarrollos.id')
+        $clientes_cerrados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
             ->where('clientes.condicion', 'cierre')
             ->where('clientes.telemarketing',1)
-            ->where('clientes.id_empresa', $empresa )
+            ->where('clientes.empresa_id', $empresa )
             ->select('clientes.id','clientes.nombre as title','clientes.condicion as laneId','clientes.telemarketing', 'desarrollos.nombre as description')
             ->get();
 

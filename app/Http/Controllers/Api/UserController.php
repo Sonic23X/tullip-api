@@ -19,29 +19,29 @@ class UserController extends Controller
         if ($search == null) {
             if ($currentPage == '1') {
                 $users = User::limit($pageSize)
-                            ->where( 'id_empresa', $empresa )
+                            ->where('empresa_id', $empresa)
                             ->get();
 
                 $totalItem = User::limit($pageSize)
-                                ->where( 'id_empresa', $empresa )
+                                ->where('empresa_id', $empresa)
                                 ->count();
             }
             else {
                 $users = User::offset($pageSize * ($currentPage - 1))
                             ->limit($pageSize)
-                            ->where('id_empresa', $empresa)
+                            ->where('empresa_id', $empresa)
                             ->get();
 
                 $totalItem = User::offset($pageSize * ($currentPage - 1))
                             ->limit($pageSize)
-                            ->where('id_empresa', $empresa)
+                            ->where('empresa_id', $empresa)
                             ->count();
             }
 
             $response = [
                 'status' => true,
                 'totalItem' => $totalItem,
-                'totalPage' => ceil(User::where( 'id_empresa', $empresa )->count( ) / $pageSize),
+                'totalPage' => ceil(User::where('empresa_id', $empresa)->count() / $pageSize),
                 'pageSize' => $pageSize,
                 'currentPage' => $currentPage,
                 'data' => $users
@@ -50,7 +50,7 @@ class UserController extends Controller
         else {
             if ($currentPage == '1') {
                 $users = User::where('name', 'like', '%'.$search.'%')
-                            ->where('id_empresa', $empresa)
+                            ->where('empresa_id', $empresa)
                             ->limit($pageSize)
                             ->get();
             }
@@ -58,14 +58,14 @@ class UserController extends Controller
                 $users = User::where('name', 'like', '%'.$search.'%')
                             ->offset($pageSize * ($currentPage - 1))
                             ->limit($pageSize)
-                            ->where('id_empresa', $empresa)
+                            ->where('empresa_id', $empresa)
                             ->get();
             }
 
             $response = [
                 'status' => true,
                 'totalItem' => User::where('name', 'like', '%'.$search.'%')->count(),
-                'totalPage' => ceil(User::where('name', 'like', '%'.$search.'%')->where('id_empresa', $empresa)->count() / $pageSize),
+                'totalPage' => ceil(User::where('name', 'like', '%'.$search.'%')->where('empresa_id', $empresa)->count() / $pageSize),
                 'pageSize' => $pageSize,
                 'currentPage' => $currentPage,
                 'data' => $users
@@ -81,7 +81,7 @@ class UserController extends Controller
             User::with(array('desarrollos' => function($query) {
                 $query->select('nombre');
             }))
-            ->where('id_empresa', $empresa)
+            ->where('empresa_id', $empresa)
             ->select('id', 'name', 'email', 'movil', 'observaciones', 'type', 'suspendido')
             ->findOrFail($id), 200);
     }
@@ -93,14 +93,14 @@ class UserController extends Controller
         if ($currentPage == '1') {
             $users = User::where('type', 'vendedor')
                         ->where('suspendido', 0)
-                        ->where('id_empresa', $empresa)
+                        ->where('empresa_id', $empresa)
                         ->limit($pageSize)
                         ->select('id', 'name')
                         ->get();
 
             $totalItem = User::where('type', 'vendedor')
                             ->where('suspendido', 0)
-                            ->where('id_empresa', $empresa)
+                            ->where('empresa_id', $empresa)
                             ->limit($pageSize)
                             ->select('id', 'name')
                             ->count();
@@ -108,7 +108,7 @@ class UserController extends Controller
         else {
             $users = User::where('type', 'vendedor')
                         ->where('suspendido', 0)
-                        ->where('id_empresa', $empresa)
+                        ->where('empresa_id', $empresa)
                         ->offset($pageSize * ( $currentPage - 1))
                         ->limit($pageSize)
                         ->select('id', 'name')
@@ -116,7 +116,7 @@ class UserController extends Controller
 
             $totalItem = User::where('type', 'vendedor')
                             ->where('suspendido', 0)
-                            ->where('id_empresa', $empresa)
+                            ->where('empresa_id', $empresa)
                             ->offset($pageSize * ($currentPage - 1))
                             ->limit($pageSize)
                             ->select('id', 'name')
@@ -126,7 +126,7 @@ class UserController extends Controller
         $response = [
             'status' => true,
             'totalItem' => $totalItem,
-            'totalPage' => ceil(User::where('type', 'vendedor')->where('id_empresa', $empresa)->count() / $pageSize),
+            'totalPage' => ceil(User::where('type', 'vendedor')->where('empresa_id', $empresa)->count() / $pageSize),
             'pageSize' => $pageSize,
             'currentPage' => $currentPage,
             'data' => $users
@@ -141,7 +141,7 @@ class UserController extends Controller
             $query->select('nombre');
         }))->findOrFail($id);
 
-        $desarrollos = Desarrollo::where('id_empresa', $empresa)->select('id', 'nombre')->get();
+        $desarrollos = Desarrollo::where('empresa_id', $empresa)->select('id', 'nombre')->get();
 
         //respuesta
         $response = [];
@@ -183,6 +183,7 @@ class UserController extends Controller
             'id_empresa' => 'required'
         ]);
 
+        $input['empresa_id'] = $input['id_empresa'];
         $input['password'] = bcrypt($input['password']);
 
         $usuario = User::create($input);

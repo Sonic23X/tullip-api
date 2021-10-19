@@ -16,16 +16,15 @@ class InmuebleController extends Controller
 {
     public function getAll($desarrollo, $pageSize, $currentPage)
     {
-        if ($currentPage == '1')
-        {
-            $inmuebles = Inmueble::join('prototipos', 'inmuebles.id_prototipo', '=', 'prototipos.id')
+        if ($currentPage == '1') {
+            $inmuebles = Inmueble::join('prototipos', 'inmuebles.prototipo_id', '=', 'prototipos.id')
                              ->where('prototipos.id_desarrollo', '=', $desarrollo)
                              ->whereNull('inmuebles.deleted_at')
                              ->select('inmuebles.*', 'prototipos.nombre')
                              ->limit($pageSize)
                              ->get();
 
-            $totalItem = Inmueble::join('prototipos', 'inmuebles.id_prototipo', '=', 'prototipos.id')
+            $totalItem = Inmueble::join('prototipos', 'inmuebles.prototipo_id', '=', 'prototipos.id')
                              ->where('prototipos.id_desarrollo', '=', $desarrollo)
                              ->whereNull('inmuebles.deleted_at')
                              ->select('inmuebles.*', 'prototipos.nombre')
@@ -34,7 +33,7 @@ class InmuebleController extends Controller
         }
         else
         {
-            $inmuebles = Inmueble::join('prototipos', 'inmuebles.id_prototipo', '=', 'prototipos.id')
+            $inmuebles = Inmueble::join('prototipos', 'inmuebles.prototipo_id', '=', 'prototipos.id')
                              ->where('prototipos.id_desarrollo', '=', $desarrollo)
                              ->whereNull('inmuebles.deleted_at')
                              ->select('inmuebles.*', 'prototipos.nombre')
@@ -42,7 +41,7 @@ class InmuebleController extends Controller
                              ->limit($pageSize)
                              ->get();
 
-            $totalItem = Inmueble::join('prototipos', 'inmuebles.id_prototipo', '=', 'prototipos.id')
+            $totalItem = Inmueble::join('prototipos', 'inmuebles.prototipo_id', '=', 'prototipos.id')
                              ->where('prototipos.id_desarrollo', '=', $desarrollo)
                              ->whereNull('inmuebles.deleted_at')
                              ->select('inmuebles.*', 'prototipos.nombre')
@@ -51,7 +50,7 @@ class InmuebleController extends Controller
                              ->count();
         }
 
-        $allItems = Inmueble::join('prototipos', 'inmuebles.id_prototipo', '=', 'prototipos.id')
+        $allItems = Inmueble::join('prototipos', 'inmuebles.prototipo_id', '=', 'prototipos.id')
                         ->where('prototipos.id_desarrollo', '=', $desarrollo)
                         ->whereNull('inmuebles.deleted_at')
                         ->select('inmuebles.*')
@@ -78,8 +77,8 @@ class InmuebleController extends Controller
     public function get($id)
     {
         $inmueble = Inmueble::find($id);
-        $prototipo = Prototipo::find($inmueble->id_prototipo);
-        $cliente = Cliente::find($inmueble->id_prospecto);
+        $prototipo = Prototipo::find($inmueble->prototipo_id);
+        $cliente = Cliente::find($inmueble->prospecto_id);
 
         return response()->json([$inmueble, $prototipo, $cliente], 200);
     }
@@ -87,7 +86,7 @@ class InmuebleController extends Controller
     public function store(Request $request)
     {
         $inmueble = $request->validate([
-            "id_prototipo" => "required|exists:prototipos,id",
+            "prototipo_id" => "required|exists:prototipos,id",
             "manzana" => "required|max:255",
             "lote" => "required|max:255",
             "calle" => "required|max:255",
@@ -118,7 +117,7 @@ class InmuebleController extends Controller
     public function update(Request $request, $id)
     {
         $inmueble = $request->validate([
-            "id_prototipo" => "required|exists:prototipos,id",
+            "prototipo_id" => "required|exists:prototipos,id",
             "manzana" => "required|max:255",
             "lote" => "required|max:255",
             "calle" => "required|max:255",
@@ -154,7 +153,7 @@ class InmuebleController extends Controller
 
     public function getPoints($desarrollo)
     {
-        $points = Inmueble::join('prototipos', 'inmuebles.id_prototipo', '=', 'prototipos.id')
+        $points = Inmueble::join('prototipos', 'inmuebles.prototipo_id', '=', 'prototipos.id')
                             ->where('prototipos.id_desarrollo', '=', $desarrollo)
                             ->whereNull('inmuebles.deleted_at')
                             ->select('inmuebles.*')

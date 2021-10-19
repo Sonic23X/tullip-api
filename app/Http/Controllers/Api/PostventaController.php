@@ -136,7 +136,7 @@ class PostventaController extends Controller
             'reporte_file' => 'required|mimes:pdf,jpg,png,jpeg',
         ]);
 
-        $ticket = TicketPostVenta::where('id_inmueble', $id_inmueble)
+        $ticket = TicketPostVenta::where('inmueble_id', $id_inmueble)
                     ->where('id', $request->input('ticket_id'))
                     ->first();
         $status = '';

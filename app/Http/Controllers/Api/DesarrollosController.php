@@ -19,25 +19,23 @@ class DesarrollosController extends Controller
         $desarollo = null;
         $totalItem = null;
 
-        if ($currentPage == "1")
-        {
+        if ($currentPage == "1") {
             $desarollo = Desarrollo::limit($pageSize)
-                                ->where( 'id_empresa', $empresa )
+                                ->where('empresa_id', $empresa)
                                 ->get();
 
             $totalItem = Desarrollo::limit($pageSize)
-                                ->where( 'id_empresa', $empresa )
+                                ->where('empresa_id', $empresa)
                                 ->count();
         }
-        else
-        {
+        else {
             $desarollo = Desarrollo::offset($pageSize * ($currentPage - 1))
-                                ->where( 'id_empresa', $empresa )
+                                ->where('empresa_id', $empresa)
                                 ->limit($pageSize)
                                 ->get();
 
             $totalItem = Desarrollo::offset($pageSize * ($currentPage - 1))
-                                ->where( 'id_empresa', $empresa )
+                                ->where('empresa_id', $empresa)
                                 ->limit($pageSize)
                                 ->count();
         }
@@ -45,7 +43,7 @@ class DesarrollosController extends Controller
         $response = [
             'status' => true,
             'totalItem' => $totalItem,
-            'totalPage' => ceil(Desarrollo::where('id_empresa', $empresa)->count() / $pageSize),
+            'totalPage' => ceil(Desarrollo::where('empresa_id', $empresa)->count() / $pageSize),
             'pageSize' => $pageSize,
             'currentPage' => $currentPage,
             'data' => $desarollo
@@ -56,7 +54,7 @@ class DesarrollosController extends Controller
 
     public function getOnlyDesarrollo($empresa)
     {
-        return response()->json(Desarrollo::where('id_empresa', $empresa)->select('id', 'nombre')->get(), 200);
+        return response()->json(Desarrollo::where('empresa_id', $empresa)->select('id', 'nombre')->get(), 200);
     }
 
     public function getDesarrollo($id)
@@ -77,7 +75,7 @@ class DesarrollosController extends Controller
         $input = $request->validate(
         [
             'nombre'    => 'required|min:3|max:255',
-            'id_empresa' => 'required',
+            'empresa_id' => 'required',
             'mapa_file'  => 'required|file'
         ]);
 

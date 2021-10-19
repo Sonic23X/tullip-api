@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Web\{
+    DashboardController,
+    CompanyController,
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -17,8 +21,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    /** Company routes */
+    Route::resource('companies', CompanyController::class);
+});
+
 
 require __DIR__.'/auth.php';

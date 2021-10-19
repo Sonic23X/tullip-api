@@ -24,17 +24,20 @@ class EmpresaController extends Controller
 
     public function store(Request $request)
     {
-        $inputEmpresa = $request->validate([
+        $companyData = $request->validate([
             'nombre' => 'required|min:3|max:255',
             'direccion' => 'required',
-            'correo' => 'required',
+            'emailE' => 'required|email',
+            'admin' => '',
         ]);
+
+        $companyData['email'] = $companyData['emailE'];
+        $companyData['admin'] = 0;
+        $companyData['days'] = 30;
     
-        $inputEmpresa['email'] = $inputEmpresa['correo'];
+        $empresa = Empresa::create($companyData);
     
-        $empresa = Empresa::create($inputEmpresa);
-    
-        $inputUser = $request->validate([
+        $userData = $request->validate([
             'name' => 'required|min:3|max:255',
             'email' => 'required|email|unique:users',
             'movil'=> '',
@@ -42,11 +45,14 @@ class EmpresaController extends Controller
             'password' => 'required|min:6',
         ]);
     
-        $inputUser['password'] = bcrypt($inputUser['password']);
-        $inputUser['type'] = 'superadmin';
-        $inputUser['id_empresa'] = $empresa->id;
+        $userData['password'] = bcrypt($userData['password']);
+        $userData['type'] = 'superadmin';
+        $userData['empresa_id'] = $empresa->id;
     
-        User::create($inputUser);
+        $user = User::create($userData);
+
+        $empresa->admin = $user->id;
+        $empresa->save();
     
         return response()->json(['message' => '¡Empresa creada con exito!'], 201);
     }
