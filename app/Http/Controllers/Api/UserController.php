@@ -180,10 +180,9 @@ class UserController extends Controller
             'observaciones' => 'max:255',
             'password' => 'required|min:6',
             'type' => 'required|in:vendedor,gerente,superadmin,admin,contabilidad,mesa_control,postventa,telemarketing',
-            'id_empresa' => 'required'
+            'empresa_id' => 'required'
         ]);
-
-        $input['empresa_id'] = $input['id_empresa'];
+        
         $input['password'] = bcrypt($input['password']);
 
         $usuario = User::create($input);

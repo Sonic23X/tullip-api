@@ -33,15 +33,15 @@ class TelemarketingController extends Controller
         $new_prospect = new Cliente;
         $new_prospect->nombre = $data['nombre'].' '.$data['apellido_paterno'].' '.$data['apellido_materno'];
         $new_prospect->anexo_detalles = $data;
-        $new_prospect->id_usuario = $userId;
-        $new_prospect->id_desarrollo = $request->input('fraccionamiento_id');
+        $new_prospect->user_id = $userId;
+        $new_prospect->desarrollo_id = $request->input('fraccionamiento_id');
         $new_prospect->hash = str_random(10);
         $new_prospect->completado = 0;
         $new_prospect->referencia_bancaria = '';
         $new_prospect->condicion_telemarketing = 'lead';
         $new_prospect->telemarketing = 1;
         $new_prospect->condicion_changed = \Carbon\Carbon::now();
-        $new_prospect->id_empresa = $request->input('empresa');
+        $new_prospect->empresa_id = $request->input('empresa');
         $new_prospect->save();
 
         if($new_prospect->id)
@@ -49,7 +49,7 @@ class TelemarketingController extends Controller
             $new_tracking = new Seguimiento;
             $new_tracking->tipo = 'nuevo';
             $new_tracking->mensaje = '';
-            $new_tracking->id_usuario =  $userId;
+            $new_tracking->user_id =  $userId;
             $new_tracking->fecha = \Carbon\Carbon::now();
             $new_tracking->empresa_id = $request->input('empresa');
             $new_prospect->trackings()->save($new_tracking);

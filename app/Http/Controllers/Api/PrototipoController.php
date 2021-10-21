@@ -150,7 +150,7 @@ class PrototipoController extends Controller
     public function getDesarrolloPrototipos($desarrollo)
     {
         return response()->json(
-            Prototipo::where('id_desarrollo', $desarrollo)->select('id', 'nombre', 'precio')->get()
+            Prototipo::where('desarrollo_id', $desarrollo)->select('id', 'nombre', 'precio')->get()
         , 200);
     }
 
@@ -177,7 +177,7 @@ class PrototipoController extends Controller
             'observaciones' => $prototipoClone->observaciones,
             'precio' => $prototipoClone->precio,
             'fotos' =>$prototipoClone->fotos,
-            'empresa_id' => $prototipoClone->id_empresa,
+            'empresa_id' => $prototipoClone->empresa_id,
             'desarrollo_id' => $desarrollo,
         ]);
 

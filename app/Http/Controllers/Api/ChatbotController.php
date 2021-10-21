@@ -530,8 +530,8 @@ class ChatbotController extends Controller
                 $prospecto->nombre = $data['nombre'].' '.$data['apellido_paterno'].' '.$data['apellido_materno'];
                 $prospecto->anexo_detalles = $data;
                 $prospecto->anexo_credito = $credito_data;
-                $prospecto->id_usuario = $vendedor->id;
-                $prospecto->id_desarrollo = $desarrollo->id;
+                $prospecto->user_id = $vendedor->id;
+                $prospecto->desarrollo_id = $desarrollo->id;
                 $prospecto->hash = str_random(10);
                 $prospecto->completado = 0;
                 $prospecto->referencia_bancaria = '';
@@ -542,9 +542,9 @@ class ChatbotController extends Controller
                     $new_tracking = new Seguimiento;
                     $new_tracking->tipo 			= 'nuevo';
                     $new_tracking->mensaje 			= '';
-                    $new_tracking->id_usuario = $vendedor->id;
+                    $new_tracking->user_id = $vendedor->id;
                     $new_tracking->fecha = \Carbon\Carbon::now();
-                    $new_tracking->id_cliente = $prospecto->id;
+                    $new_tracking->cliente_id = $prospecto->id;
                     $new_tracking->save();
 
                     $prospecto->setCompletedPercent();
@@ -759,9 +759,9 @@ class ChatbotController extends Controller
                     $prospecto->nombre = $data['nombre'].' '.$data['apellido_paterno'].' '.$data['apellido_materno'];
                     $prospecto->anexo_detalles = $data;
                     $prospecto->anexo_credito = $credito_data;
-                    $prospecto->id_usuario = $vendedor ? $vendedor->id : null;
-                    $prospecto->id_desarrollo = $desarrollo->id;
-                    $prospecto->id_empresa = $vendedor ? $vendedor->id_empresa : 0;
+                    $prospecto->user_id = $vendedor ? $vendedor->id : null;
+                    $prospecto->desarrollo_id = $desarrollo->id;
+                    $prospecto->empresa_id = $vendedor ? $vendedor->empresa_id : 0;
                     $prospecto->hash = str_random(10);
                     $prospecto->completado = 0;
                     $prospecto->referencia_bancaria = '';
@@ -774,14 +774,14 @@ class ChatbotController extends Controller
                 $new_tracking = new Seguimiento;
                 $new_tracking->tipo = $request->input('tipo');
                 $new_tracking->mensaje = $prospecto->nombre . ' visitó el fraccionamiento ' . $desarrollo->nombre;
-                $new_tracking->id_usuario = $prospecto->id_usuario;
-                $new_tracking->id_empresa = $vendedor ? $vendedor->id_empresa : 0;
+                $new_tracking->user_id = $prospecto->user_id;
+                $new_tracking->empresa_id = $vendedor ? $vendedor->empresa_id : 0;
                 $new_tracking->fecha = \Carbon\Carbon::now();
                 
                 if ($request->input('visita_anterior') == 'SI')
                     $new_tracking->primera_visita = 1;    
                 
-                $new_tracking->id_cliente = $prospecto->id;
+                $new_tracking->cliente_id = $prospecto->id;
                 $new_tracking->save();
                 $prospecto->setCompletedPercent();
             }

@@ -55,7 +55,7 @@ class PostventaController extends Controller
         $detalles_request = json_decode($request->input('detalles'));
 
         $ticket = new TicketPostVenta();
-        $ticket->id_inmueble = $inmueble->id;
+        $ticket->inmueble_id = $inmueble->id;
 
         $detalles['detalles'] = [];
 

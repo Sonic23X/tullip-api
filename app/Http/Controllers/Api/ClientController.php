@@ -95,21 +95,21 @@ class ClientController extends Controller
         $new_prospect = new Models\Cliente;
         $new_prospect->nombre = $data['nombre'].' '.$data['apellido_paterno'].' '.$data['apellido_materno'];
         $new_prospect->anexo_detalles = $data;
-        $new_prospect->id_usuario = $data['user_id'];
-        $new_prospect->id_desarrollo = $data['desarrollo'];
+        $new_prospect->user_id = $data['user_id'];
+        $new_prospect->desarrollo_id = $data['desarrollo'];
         $new_prospect->hash = Str::random(10);
         $new_prospect->completado = 0;
         $new_prospect->referencia_bancaria = '';
         $new_prospect->condicion_changed = \Carbon\Carbon::now();
-        $new_prospect->id_empresa = $data['empresa'];
+        $new_prospect->empresa_id = $data['empresa'];
         $new_prospect->save();
 
         if ($new_prospect->id) {
             $new_tracking = new Models\Seguimiento;
             $new_tracking->tipo = 'nuevo';
             $new_tracking->mensaje = 'Cliente registrado';
-            $new_tracking->id_usuario =  $data['user_id'];
-            $new_tracking->id_empresa = $data['empresa'];
+            $new_tracking->user_id =  $data['user_id'];
+            $new_tracking->empresa_id = $data['empresa'];
             $new_tracking->fecha = \Carbon\Carbon::now();
             $new_prospect->trackings()->save($new_tracking);
 
@@ -260,7 +260,7 @@ class ClientController extends Controller
                 break;
 
             case '_vendedor':
-                $prospect->id_usuario = $request->input('vendedor');
+                $prospect->user_id = $request->input('vendedor');
                 $prospect->save();
                 
                 return 	response()->json(['message' => 'Vendedor editado'], 201);
@@ -286,7 +286,7 @@ class ClientController extends Controller
     {
         $prospect = Models\Cliente::where('hash', $hash)->first();
 
-        $seguimento = Models\Seguimiento::where('id_cliente', $prospect->id)
+        $seguimento = Models\Seguimiento::where('cliente_id', $prospect->id)
                         ->where('user_id', $id_user)
                         ->where('tipo', '!=', 'tarea')
                         ->orderBy('created_at', 'DESC')
@@ -325,8 +325,8 @@ class ClientController extends Controller
                 $new_tracking->fecha = $fecha;
             }
 
-            $new_tracking->id_usuario = $id_user;
-            $new_tracking->id_empresa = $tracking['empresa'];
+            $new_tracking->user_id = $id_user;
+            $new_tracking->empresa_id = $tracking['empresa'];
             $prospect->trackings()->save($new_tracking);
 
             return response()->json(['message' => 'seguimiento creado'], 201);
@@ -379,8 +379,8 @@ class ClientController extends Controller
         $task = new Models\Seguimiento;
         $task->tipo = 'tarea';
         $task->mensaje = $request->get('mensaje');
-        $task->id_usuario = $id_user;
-        $task->id_empresa = $request->input('empresa');
+        $task->user_id = $id_user;
+        $task->empresa_id = $request->input('empresa');
         $task->fecha = $request->input('fecha');
 
         $customer->trackings()->save($task);
@@ -428,7 +428,7 @@ class ClientController extends Controller
 
         $task = $customer->trackings()->where('tipo', 'tarea')->where('id', $taskId)->first();
 
-        if ($task->id_usuario != $id_user)
+        if ($task->user_id != $id_user)
             return response('', 403);
 
         $task->delete();

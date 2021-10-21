@@ -18,14 +18,14 @@ class InmuebleController extends Controller
     {
         if ($currentPage == '1') {
             $inmuebles = Inmueble::join('prototipos', 'inmuebles.prototipo_id', '=', 'prototipos.id')
-                             ->where('prototipos.id_desarrollo', '=', $desarrollo)
+                             ->where('prototipos.desarrollo_id', '=', $desarrollo)
                              ->whereNull('inmuebles.deleted_at')
                              ->select('inmuebles.*', 'prototipos.nombre')
                              ->limit($pageSize)
                              ->get();
 
             $totalItem = Inmueble::join('prototipos', 'inmuebles.prototipo_id', '=', 'prototipos.id')
-                             ->where('prototipos.id_desarrollo', '=', $desarrollo)
+                             ->where('prototipos.desarrollo_id', '=', $desarrollo)
                              ->whereNull('inmuebles.deleted_at')
                              ->select('inmuebles.*', 'prototipos.nombre')
                              ->limit($pageSize)
@@ -34,7 +34,7 @@ class InmuebleController extends Controller
         else
         {
             $inmuebles = Inmueble::join('prototipos', 'inmuebles.prototipo_id', '=', 'prototipos.id')
-                             ->where('prototipos.id_desarrollo', '=', $desarrollo)
+                             ->where('prototipos.desarrollo_id', '=', $desarrollo)
                              ->whereNull('inmuebles.deleted_at')
                              ->select('inmuebles.*', 'prototipos.nombre')
                              ->offset($pageSize * ($currentPage - 1))
@@ -42,7 +42,7 @@ class InmuebleController extends Controller
                              ->get();
 
             $totalItem = Inmueble::join('prototipos', 'inmuebles.prototipo_id', '=', 'prototipos.id')
-                             ->where('prototipos.id_desarrollo', '=', $desarrollo)
+                             ->where('prototipos.desarrollo_id', '=', $desarrollo)
                              ->whereNull('inmuebles.deleted_at')
                              ->select('inmuebles.*', 'prototipos.nombre')
                              ->offset($pageSize * ($currentPage - 1))
@@ -51,7 +51,7 @@ class InmuebleController extends Controller
         }
 
         $allItems = Inmueble::join('prototipos', 'inmuebles.prototipo_id', '=', 'prototipos.id')
-                        ->where('prototipos.id_desarrollo', '=', $desarrollo)
+                        ->where('prototipos.desarrollo_id', '=', $desarrollo)
                         ->whereNull('inmuebles.deleted_at')
                         ->select('inmuebles.*')
                         ->count();
@@ -154,7 +154,7 @@ class InmuebleController extends Controller
     public function getPoints($desarrollo)
     {
         $points = Inmueble::join('prototipos', 'inmuebles.prototipo_id', '=', 'prototipos.id')
-                            ->where('prototipos.id_desarrollo', '=', $desarrollo)
+                            ->where('prototipos.desarrollo_id', '=', $desarrollo)
                             ->whereNull('inmuebles.deleted_at')
                             ->select('inmuebles.*')
                             ->get();
@@ -174,8 +174,8 @@ class InmuebleController extends Controller
         $inmueble = Inmueble::find($data['inmueble']);
         $precio = $inmueble->precio;
 
-        $inmueble->id_vendedor = $data['usuario' ];
-        $inmueble->id_prospecto = $data['cliente'];
+        $inmueble->vendedor_id = $data['usuario' ];
+        $inmueble->prospecto_id = $data['cliente'];
         $inmueble->fecha_apartado = \Carbon\Carbon::now();
         $inmueble->status = 'apartado';
         $inmueble->precio_venta = $precio;
@@ -185,9 +185,9 @@ class InmuebleController extends Controller
         $new_tracking->tipo = Seguimiento::TIPO_COMENTARIO;
         $new_tracking->mensaje = 'Inmueble asignado';
         $new_tracking->fecha = \Carbon\Carbon::now();
-        $new_tracking->id_usuario = $data['usuario'];
-        $new_tracking->id_cliente = $inmueble->id_prospecto;
-        $new_tracking->id_empresa = $data['empresa'];
+        $new_tracking->user_id = $data['usuario'];
+        $new_tracking->cliente_id = $inmueble->prospecto_id;
+        $new_tracking->empresa_id = $data['empresa'];
         $new_tracking->save();
 
         return response()->json(['message' => 'Inmueble apartado'], 200);
@@ -206,8 +206,8 @@ class InmuebleController extends Controller
         $inmueble = Inmueble::find($data['inmueble']);
         $old_prospecto_id = $data['cliente'];
 
-        $inmueble->id_vendedor = null;
-        $inmueble->id_prospecto = null;
+        $inmueble->vendedor_id = null;
+        $inmueble->prospecto_od = null;
         $inmueble->fecha_apartado = null;
         $inmueble->status = Inmueble::STATUS_LIBRE;
         $inmueble->save();
@@ -217,9 +217,9 @@ class InmuebleController extends Controller
         $new_tracking->tipo = Seguimiento::TIPO_COMENTARIO;
         $new_tracking->mensaje = "Lote Cancelado. " . $data['comentario'];
         $new_tracking->fecha = \Carbon\Carbon::now();
-        $new_tracking->id_usuario = $data['usuario'];
-        $new_tracking->id_cliente = $old_prospecto_id;
-        $new_tracking->id_empresa = $data['empresa'];
+        $new_tracking->user_id = $data['usuario'];
+        $new_tracking->cliente_id = $old_prospecto_id;
+        $new_tracking->empresa_id = $data['empresa'];
         $new_tracking->save();
 
         return response()->json(['message' => 'Apartado cancelado'], 200);
@@ -243,9 +243,9 @@ class InmuebleController extends Controller
         $new_tracking->tipo = Seguimiento::TIPO_COMENTARIO;
         $new_tracking->mensaje = "Inmueble titulado";
         $new_tracking->fecha = \Carbon\Carbon::now();
-        $new_tracking->id_usuario = $data['usuario'];
-        $new_tracking->id_cliente = $data['cliente'];
-        $new_tracking->id_empresa = $data['empresa'];
+        $new_tracking->user_id = $data['usuario'];
+        $new_tracking->cliente_id = $data['cliente'];
+        $new_tracking->empresa_id = $data['empresa'];
         $new_tracking->save();
 
         return response()->json(['message' => 'Inmuebele titulado'], 200);
@@ -269,9 +269,9 @@ class InmuebleController extends Controller
   		$new_tracking->tipo = Seguimiento::TIPO_COMENTARIO;
   		$new_tracking->mensaje = "Titulación cancelada";
   		$new_tracking->fecha = \Carbon\Carbon::now();
-  		$new_tracking->id_usuario = $data['usuario'];
-  		$new_tracking->id_cliente = $data['cliente'];
-        $new_tracking->id_empresa = $data['empresa'];
+  		$new_tracking->user_id = $data['usuario'];
+  		$new_tracking->cliente_id = $data['cliente'];
+        $new_tracking->empresa_id = $data['empresa'];
   		$new_tracking->save();
 
   		return response()->json(['message' => 'Titulación cancelada'], 200);
