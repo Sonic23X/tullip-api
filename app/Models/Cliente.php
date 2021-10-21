@@ -16,7 +16,7 @@ class Cliente extends Model
      */
     public function trackings()
     {
-        return $this->hasMany('App\Models\Seguimiento', 'id_cliente');
+        return $this->hasMany('App\Models\Seguimiento', 'cliente_id');
     }
 
     /**

@@ -296,12 +296,12 @@ class ClientController extends Controller
 
     public function getSeguimientoByUser($id_user)
     {
-        $seguimento = Models\Seguimiento::where('user_id',$id_user)
+        $seguimento = Models\Seguimiento::where('user_id', $id_user)
                         ->where('tipo','!=','tarea')
                         ->orderBy('created_at','DESC')
                         ->limit(10)
                         ->get();
-        return $seguimento->load( 'seller', 'cliente' );
+        return $seguimento->load('seller', 'cliente');
     }
 
     public function addSeguimiento(Request $request, $hash, $id_user)

@@ -61,8 +61,8 @@ class Desarrollo extends Model
      */
     public function inmueblesAll()
     {
-        return Inmueble::join('prototipos', 'inmuebles.id_prototipo', '=', 'prototipos.id')
-                    ->where('prototipos.id_desarrollo', '=', $this->id)
+        return Inmueble::join('prototipos', 'inmuebles.prototipo_id', '=', 'prototipos.id')
+                    ->where('prototipos.desarrollo_id', '=', $this->id)
                     ->whereNull('inmuebles.deleted_at')
                     ->select('inmuebles.*')
                     ->get();

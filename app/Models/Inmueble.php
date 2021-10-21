@@ -43,7 +43,7 @@ class Inmueble extends Model
      * @var array
      */
     protected $fillable = [
-        'id_prototipo',
+        'prototipo_id',
         'manzana',
         'lote',
         'calle',
@@ -65,8 +65,8 @@ class Inmueble extends Model
         'orientacion_4',
         '_map_x',
         '_map_y',
-        'id_vendedor',
-        'id_prospecto',
+        'vendedor_id',
+        'prospecto_id',
         'fecha_apartado',
         'apartado_pagado',
         'precio',

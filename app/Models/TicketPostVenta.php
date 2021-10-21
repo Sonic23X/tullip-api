@@ -27,6 +27,6 @@ class TicketPostVenta extends Model
 
     public function inmueble()
     {
-        return $this->belongsTo('App\Models\Inmueble', 'id_inmueble');
+        return $this->belongsTo('App\Models\Inmueble', 'inmueble_id');
     }
 }
