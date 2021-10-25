@@ -79,7 +79,13 @@ class InmuebleController extends Controller
         $prototipo = Prototipo::find($inmueble->prototipo_id);
         $cliente = Cliente::find($inmueble->prospecto_id);
 
-        return response()->json([$inmueble, $prototipo, $cliente], 200);
+        $data = [
+            'inmueble' => $inmueble,
+            'propotipo' => $prototipo,
+            'cliente' => $cliente
+        ];
+
+        return response()->json($data, 200);
     }
 
     public function store(Request $request)

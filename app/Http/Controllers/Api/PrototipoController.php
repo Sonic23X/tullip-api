@@ -82,7 +82,7 @@ class PrototipoController extends Controller
             "empresa_id" => "required"
         ]), ['desarrollo_id' => $sembrado]));
 
-        $i = 0;
+        /*$i = 0;
         $image = "file_";
         $fotos = [];
 
@@ -95,7 +95,7 @@ class PrototipoController extends Controller
 
         //save the photos
         $prototipo->fotos = $fotos;
-        $prototipo->save();
+        $prototipo->save();*/
 
         return response()->json(['message' => '¡Prototipo creado!'], 201);
     }
@@ -117,7 +117,7 @@ class PrototipoController extends Controller
         $prototipo->update($dataPrototype);
 
         //si cargó nuevas fotos
-        if ($request->has('file_0')) {
+        /*if ($request->has('file_0')) {
             $prototipo = Prototipo::findOrFail($id);
 
             //actualizamos las fotos
@@ -134,7 +134,7 @@ class PrototipoController extends Controller
             //save the photos
             $prototipo->fotos = $fotos;
             $prototipo->save();
-        }
+        }*/
 
         return response()->json(['message' => '¡Prototipo actualizado!'], 200);
     }
@@ -176,7 +176,7 @@ class PrototipoController extends Controller
             'baños' => $prototipoClone->baños,
             'observaciones' => $prototipoClone->observaciones,
             'precio' => $prototipoClone->precio,
-            'fotos' =>$prototipoClone->fotos,
+            'fotos' => $prototipoClone->fotos,
             'empresa_id' => $prototipoClone->empresa_id,
             'desarrollo_id' => $desarrollo,
         ]);
