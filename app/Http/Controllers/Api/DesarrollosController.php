@@ -127,8 +127,8 @@ class DesarrollosController extends Controller
             $y = str_replace('px', '', $pointData[2]);
 
             $inmueble = Inmueble::find($pointData[0]);
-            $inmueble->_map_x = $x;
-            $inmueble->_map_y = $y;
+            $inmueble->_map_x = $x != '' ? $x : NULL;
+            $inmueble->_map_y = $y != '' ? $y : NULL;
 
             $inmueble->save();
             $i++;
