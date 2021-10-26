@@ -100,18 +100,18 @@ class InmuebleController extends Controller
             "m2_terreno" => "required|max:255",
             "status" => "required|in:libre,apartado,vencido,titulado",
             "precio" => "required|numeric",
-            // "medidas_1" => "required|max:255",
-            // "medidas_2" => "required|max:255",
-            // "medidas_3" => "required|max:255",
-            // "medidas_4" => "required|max:255",
-            // "colindancia_1" => "required|max:255",
-            // "colindancia_2" => "required|max:255",
-            // "colindancia_3" => "required|max:255",
-            // "colindancia_4" => "required|max:255",
-            // "orientacion_1" => "required|max:255",
-            // "orientacion_2" => "required|max:255",
-            // "orientacion_3" => "required|max:255",
-            // "orientacion_4" => "required|max:255",
+            "medidas_1" => "max:255",
+            "medidas_2" => "max:255",
+            "medidas_3" => "max:255",
+            "medidas_4" => "max:255",
+            "colindancia_1" => "max:255",
+            "colindancia_2" => "max:255",
+            "colindancia_3" => "max:255",
+            "colindancia_4" => "max:255",
+            "orientacion_1" => "max:255",
+            "orientacion_2" => "max:255",
+            "orientacion_3" => "max:255",
+            "orientacion_4" => "max:255",
         ]);
 
         Inmueble::create($inmueble);
@@ -131,18 +131,18 @@ class InmuebleController extends Controller
             "m2_terreno" => "required|max:255",
             "status" => "required|in:libre,apartado,vencido,titulado",
             "precio" => "required|numeric",
-            // "medidas_1" => "required|max:255",
-            // "medidas_2" => "required|max:255",
-            // "medidas_3" => "required|max:255",
-            // "medidas_4" => "required|max:255",
-            // "colindancia_1" => "required|max:255",
-            // "colindancia_2" => "required|max:255",
-            // "colindancia_3" => "required|max:255",
-            // "colindancia_4" => "required|max:255",
-            // "orientacion_1" => "required|max:255",
-            // "orientacion_2" => "required|max:255",
-            // "orientacion_3" => "required|max:255",
-            // "orientacion_4" => "required|max:255",
+            "medidas_1" => "max:255",
+            "medidas_2" => "max:255",
+            "medidas_3" => "max:255",
+            "medidas_4" => "max:255",
+            "colindancia_1" => "max:255",
+            "colindancia_2" => "max:255",
+            "colindancia_3" => "max:255",
+            "colindancia_4" => "max:255",
+            "orientacion_1" => "max:255",
+            "orientacion_2" => "max:255",
+            "orientacion_3" => "max:255",
+            "orientacion_4" => "max:255",
         ]);
 
         Inmueble::findOrFail($id)->update($inmueble);
@@ -167,7 +167,7 @@ class InmuebleController extends Controller
         return response()->json($points, 200);
     }
 
-    public function apartar(Request $requesta)
+    public function apartar(Request $request)
     {
         $data = $request->validate([
             'cliente' => 'required',
