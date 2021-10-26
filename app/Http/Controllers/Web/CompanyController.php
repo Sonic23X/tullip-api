@@ -47,11 +47,11 @@ class CompanyController extends Controller
             'nombre' => 'required|min:3|max:255',
             'direccion' => 'required',
             'emailE' => 'required|email',
-            'admin' => '',
+            'user_id' => '',
         ]);
 
         $companyData['email'] = $companyData['emailE'];
-        $companyData['admin'] = 0;
+        $companyData['user_id'] = 0;
         $companyData['days'] = 30;
     
         $empresa = Empresa::create($companyData);
@@ -70,7 +70,7 @@ class CompanyController extends Controller
     
         $user = User::create($userData);
 
-        $empresa->admin = $user->id;
+        $empresa->user_id = $user->id;
         $empresa->save();
 
         return redirect('/adaccess/companies');
