@@ -77,26 +77,26 @@ class TelemarketingController extends Controller
     {
         $clientes_prospectos = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
             ->where('clientes.condicion', 'prospecto')
-            ->where('clientes.telemarketing',1)
+            ->where('clientes.telemarketing', 1)
             ->where('clientes.empresa_id', $empresa)
             ->get();
 
         $clientes_calificados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
             ->where('clientes.condicion', 'calificado')
-            ->where('clientes.telemarketing',1)
-            ->where('clientes.empresa_id', $empresa )
+            ->where('clientes.telemarketing', 1)
+            ->where('clientes.empresa_id', $empresa)
             ->get();
 
         $clientes_citados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
             ->where('clientes.condicion', 'cita')
-            ->where('clientes.telemarketing',1)
-            ->where('clientes.empresa_id', $empresa )
+            ->where('clientes.telemarketing', 1)
+            ->where('clientes.empresa_id', $empresa)
             ->get();
 
         $clientes_cerrados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
             ->where('clientes.condicion', 'cierre')
-            ->where('clientes.telemarketing',1)
-            ->where('clientes.empresa_id', $empresa )
+            ->where('clientes.telemarketing', 1)
+            ->where('clientes.empresa_id', $empresa)
             ->get();
 
         $data = [
@@ -185,21 +185,21 @@ class TelemarketingController extends Controller
         $clientes_calificados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
             ->where('clientes.condicion', 'calificado')
             ->where('clientes.telemarketing',1)
-            ->where('clientes.empresa_id', $empresa )
+            ->where('clientes.empresa_id', $empresa)
             ->select('clientes.id','clientes.nombre as nombre','clientes.condicion as condicion','clientes.telemarketing', 'desarrollos.nombre as desarrollo', 'clientes.hash')
             ->get();
 
         $clientes_citados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
             ->where('clientes.condicion', 'cita')
             ->where('clientes.telemarketing',1)
-            ->where('clientes.empresa_id', $empresa )
+            ->where('clientes.empresa_id', $empresa)
             ->select('clientes.id','clientes.nombre as nombre','clientes.condicion as condicion','clientes.telemarketing', 'desarrollos.nombre as desarrollo', 'clientes.hash')
             ->get();
 
         $clientes_cerrados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
             ->where('clientes.condicion', 'cierre')
             ->where('clientes.telemarketing',1)
-            ->where('clientes.empresa_id', $empresa )
+            ->where('clientes.empresa_id', $empresa)
             ->select('clientes.id','clientes.nombre as nombre','clientes.condicion as condicion','clientes.telemarketing', 'desarrollos.nombre as desarrollo', 'clientes.hash')
             ->get();
 
