@@ -85,7 +85,7 @@ class Cliente extends Model
 
 	public function lotes()
     {
-		return $this->hasMany('App\Models\Inmueble');
+		return $this->hasMany('App\Models\Inmueble', 'prospecto_id');
 	}
 
     public function getDocumentsAttribute()
@@ -139,11 +139,11 @@ class Cliente extends Model
      * Get the anexo_trabajo.
      */
     public function getAnexoCreditoAttribute($value)
-    {   
+    {
         $value = json_decode($value);
-             
+
         if(isset($value->tipo_credito)){
-            
+
             switch($value->tipo_credito){
                 case 'Infonavit Tradicional':
                 case 'Infonavit Total':
@@ -172,7 +172,7 @@ class Cliente extends Model
                 case 'Bancarios':
                     $credito = 'bancario';
                     break;
-                
+
                 case 'Isssfam':
                 case 'Caprepol':
                 default:
@@ -244,7 +244,7 @@ class Cliente extends Model
                 $date = new \Carbon\Carbon('0001-01-01');
             }
         }
-        
+
         return $date;
     }
 

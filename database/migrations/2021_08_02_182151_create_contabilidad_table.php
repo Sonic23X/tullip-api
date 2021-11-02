@@ -16,7 +16,7 @@ class CreateContabilidadTable extends Migration
         Schema::create('contabilidad', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('cliente_id');
-            $table->unsignedInteger('inmueble_id')->nulleable()->default(null);
+            $table->unsignedInteger('inmueble_id')->nullable()->default(null);
             $table->dateTime('fecha_pago')->nullable()->default(null);
             $table->unsignedInteger('tipo');
             $table->float('monto', 10, 2);
