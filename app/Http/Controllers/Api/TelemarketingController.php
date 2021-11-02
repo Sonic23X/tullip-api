@@ -73,46 +73,144 @@ class TelemarketingController extends Controller
         return response()->json(['message' => '¡Registro actualizado!'], 200);
     }
 
-    public function getClientes(Request $request, $empresa)
+    public function getNumbers($empresa)
+    {
+        $clientes_prospectos = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
+            ->where('clientes.condicion', 'prospecto')
+            ->where('clientes.telemarketing', 1)
+            ->where('clientes.empresa_id', $empresa)
+            ->get();
+
+        $clientes_calificados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
+            ->where('clientes.condicion', 'calificado')
+            ->where('clientes.telemarketing', 1)
+            ->where('clientes.empresa_id', $empresa)
+            ->get();
+
+        $clientes_citados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
+            ->where('clientes.condicion', 'cita')
+            ->where('clientes.telemarketing', 1)
+            ->where('clientes.empresa_id', $empresa)
+            ->get();
+
+        $clientes_cerrados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
+            ->where('clientes.condicion', 'cierre')
+            ->where('clientes.telemarketing', 1)
+            ->where('clientes.empresa_id', $empresa)
+            ->get();
+
+        $data = [
+            'prospectos_count' => $clientes_prospectos->count(),
+            'calificados_count' => $clientes_calificados->count(),
+            'citados_count' => $clientes_citados->count(),
+            'cerrados_count' => $clientes_cerrados->count()
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function getProspects($empresa)
+    {
+        $clientes_prospectos = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
+            ->where('clientes.condicion', 'prospecto')
+            ->where('clientes.telemarketing', 1)
+            ->where('clientes.empresa_id', $empresa)
+            ->select('clientes.id','clientes.nombre as nombre','clientes.condicion as condicion','clientes.telemarketing', 'desarrollos.nombre as desarrollo', 'clientes.hash')
+            ->get();
+
+        $data = [
+            'clients' => $clientes_prospectos,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function getCalificated($empresa)
+    {
+        $clientes_calificados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
+            ->where('clientes.condicion', 'calificado')
+            ->where('clientes.telemarketing', 1)
+            ->where('clientes.empresa_id', $empresa)
+            ->select('clientes.id','clientes.nombre as nombre','clientes.condicion as condicion','clientes.telemarketing', 'desarrollos.nombre as desarrollo', 'clientes.hash')
+            ->get();
+
+        $data = [
+            'clients' => $clientes_calificados,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function getCited($empresa)
+    {
+        $clientes_citados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
+            ->where('clientes.condicion', 'cita')
+            ->where('clientes.telemarketing', 1)
+            ->where('clientes.empresa_id', $empresa)
+            ->select('clientes.id','clientes.nombre as nombre','clientes.condicion as condicion','clientes.telemarketing', 'desarrollos.nombre as desarrollo', 'clientes.hash')
+            ->get();
+
+        $data = [
+            'clients' => $clientes_citados,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function getClosed($empresa)
+    {
+        $clientes_cerrados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
+            ->where('clientes.condicion', 'cierre')
+            ->where('clientes.telemarketing', 1)
+            ->where('clientes.empresa_id', $empresa)
+            ->select('clientes.id','clientes.nombre as nombre','clientes.condicion as condicion','clientes.telemarketing', 'desarrollos.nombre as desarrollo', 'clientes.hash')
+            ->get();
+
+        $data = [
+            'clients' => $clientes_cerrados,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function getClientes($empresa)
     {
         $clientes_prospectos = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
             ->where('clientes.condicion', 'prospecto')
             ->where('clientes.telemarketing',1)
             ->where('clientes.empresa_id', $empresa)
-            ->select('clientes.id','clientes.nombre as title','clientes.condicion as laneId','clientes.telemarketing', 'desarrollos.nombre as description')
+            ->select('clientes.id','clientes.nombre as nombre','clientes.condicion as condicion','clientes.telemarketing', 'desarrollos.nombre as desarrollo', 'clientes.hash')
             ->get();
 
         $clientes_calificados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
             ->where('clientes.condicion', 'calificado')
             ->where('clientes.telemarketing',1)
-            ->where('clientes.empresa_id', $empresa )
-            ->select('clientes.id','clientes.nombre as title','clientes.condicion as laneId','clientes.telemarketing', 'desarrollos.nombre as description')
+            ->where('clientes.empresa_id', $empresa)
+            ->select('clientes.id','clientes.nombre as nombre','clientes.condicion as condicion','clientes.telemarketing', 'desarrollos.nombre as desarrollo', 'clientes.hash')
             ->get();
 
         $clientes_citados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
             ->where('clientes.condicion', 'cita')
             ->where('clientes.telemarketing',1)
-            ->where('clientes.empresa_id', $empresa )
-            ->select('clientes.id','clientes.nombre as title','clientes.condicion as laneId','clientes.telemarketing', 'desarrollos.nombre as description')
+            ->where('clientes.empresa_id', $empresa)
+            ->select('clientes.id','clientes.nombre as nombre','clientes.condicion as condicion','clientes.telemarketing', 'desarrollos.nombre as desarrollo', 'clientes.hash')
             ->get();
 
         $clientes_cerrados = Cliente::join('desarrollos', 'clientes.desarrollo_id', '=', 'desarrollos.id')
             ->where('clientes.condicion', 'cierre')
             ->where('clientes.telemarketing',1)
-            ->where('clientes.empresa_id', $empresa )
-            ->select('clientes.id','clientes.nombre as title','clientes.condicion as laneId','clientes.telemarketing', 'desarrollos.nombre as description')
+            ->where('clientes.empresa_id', $empresa)
+            ->select('clientes.id','clientes.nombre as nombre','clientes.condicion as condicion','clientes.telemarketing', 'desarrollos.nombre as desarrollo', 'clientes.hash')
             ->get();
 
-        $clientes_json = [];
-        $clientes_json['prospectos'] = $clientes_prospectos;
-        $clientes_json['calificados'] = $clientes_calificados;
-        $clientes_json['citados'] = $clientes_citados;
-        $clientes_json['cerrados'] = $clientes_cerrados;
-        $clientes_json['prospectos_count'] = $clientes_prospectos->count();
-        $clientes_json['calificados_count'] = $clientes_calificados->count();
-        $clientes_json['citados_count'] = $clientes_citados->count();
-        $clientes_json['cerrados_count'] = $clientes_cerrados->count();
+        $data = [
+            'clients' => $clientes_prospectos->concat($clientes_calificados)->concat($clientes_citados)->concat($clientes_cerrados),
+            'prospectos_count' => $clientes_prospectos->count(),
+            'calificados_count' => $clientes_calificados->count(),
+            'citados_count' => $clientes_citados->count(),
+            'cerrados_count' => $clientes_cerrados->count()
+        ];
 
-        return response()->json($clientes_json, 200);
+        return response()->json($data, 200);
     }
 }
