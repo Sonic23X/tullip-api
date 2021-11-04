@@ -71,7 +71,7 @@ class Cliente extends Model
 
     public function desarrollo()
     {
-        return $this->belongsTo('App\Models\Desarrollo',);
+        return $this->belongsTo('App\Models\Desarrollo');
     }
 
     public function documentos()

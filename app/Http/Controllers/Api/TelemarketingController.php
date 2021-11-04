@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\{
     Cliente,
     Seguimiento
@@ -35,7 +36,7 @@ class TelemarketingController extends Controller
         $new_prospect->anexo_detalles = $data;
         $new_prospect->user_id = $userId;
         $new_prospect->desarrollo_id = $request->input('fraccionamiento_id');
-        $new_prospect->hash = str_random(10);
+        $new_prospect->hash = Str::random(10);
         $new_prospect->completado = 0;
         $new_prospect->referencia_bancaria = '';
         $new_prospect->condicion_telemarketing = 'lead';
