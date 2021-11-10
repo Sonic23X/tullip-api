@@ -25,18 +25,18 @@ class ClientController extends Controller
                         })
                     );
     }
-    
+
     public function getClients($id_desarrollo, $pageSize, $currentPage, Request $request)
     {
         $clients = Models\Cliente::where('desarrollo_id', $id_desarrollo)->orderBy('created_at', 'desc');
-        if ($request->input('nombre')) {
+        if ($request->input('nombre') != '') {
             $clients->where('nombre', 'like', "%{$request->input('nombre')}%");
         }
-        if ($request->input('vendedor')) {
+        if ($request->input('vendedor') != '') {
             $clients->where('user_id', $request->input('vendedor'));
         }
         $totalItem = $clients->count();
-        $currentPage=$currentPage + 1;
+        $currentPage = $currentPage + 1;
         if ($currentPage == '1')
             $clients = $clients->limit($pageSize)->get();
         else
@@ -121,7 +121,7 @@ class ClientController extends Controller
             return response()->json(['message' => 'error al crear el cliente'], 400);
     }
 
-    public function edit(Request $request, $hash, $id_panel) 
+    public function edit(Request $request, $hash, $id_panel)
     {
         $prospect = Models\Cliente::where('hash', $hash)->first();
         if (empty($prospect)) {
@@ -193,7 +193,7 @@ class ClientController extends Controller
                 $prospect->anexo_trabajo = $data;
                 $prospect->save();
                 $prospect->setCompletedPercent();
-                
+
                 return response()->json(['message' => 'cliente editado'], 201);
                 break;
 
@@ -214,7 +214,7 @@ class ClientController extends Controller
                 $prospect->anexo_referencias = $data;
                 $prospect->save();
                 $prospect->setCompletedPercent();
-                
+
                 return response()->json(['message' => 'cliente guardado'], 201);
                 break;
 
@@ -262,7 +262,7 @@ class ClientController extends Controller
             case '_vendedor':
                 $prospect->user_id = $request->input('vendedor');
                 $prospect->save();
-                
+
                 return 	response()->json(['message' => 'Vendedor editado'], 201);
                 break;
         }
@@ -311,7 +311,7 @@ class ClientController extends Controller
         if (empty($prospect)) {
             return response()->json(['message' => 'Cliente no encontrado'], 404);
         }
-        
+
         $tracking = $request->only('date','message','type', 'empresa');
 
         if ($tracking) {
@@ -414,7 +414,7 @@ class ClientController extends Controller
 
         $tareas = $request->get('task');
 
-        foreach ($tareas as $tarea) 
+        foreach ($tareas as $tarea)
         {
             Models\Seguimiento::where('id', $tarea)->update(['completado' => 1]);
         }
@@ -441,14 +441,14 @@ class ClientController extends Controller
         $prospect = Models\Cliente::where('hash', $hash)->first();
         if (empty($prospect))
             return response()->json(['message' => 'error al crear el cliente'], 400);
-        
+
         $valid_extensions = array('jpg','jpeg', 'png', 'bmp', 'gif');
         $file = $request->file('documento');
 
         if ($request->hasFile('documento')) {
 
             $extension = $file->getClientOriginalExtension();
-            if (Arr::exists($valid_extensions,$extension)) 
+            if (Arr::exists($valid_extensions,$extension))
                 return response()->json(['message' => 'Extensión del archivo inválida'], 400);
 
             $path = $file->storeAs("documents/{$prospect->id}", $request->input('nombre').'.'.$extension);
@@ -462,7 +462,7 @@ class ClientController extends Controller
             ];
 
             $document = Models\Documento::create($documentData);
-            
+
             return response()->json(['message' => 'Documento guardado'], 201);
         }
         return response()->json(['message' => 'Documento no válido'], 400);
