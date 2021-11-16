@@ -36,7 +36,6 @@ class ClientController extends Controller
             $clients->where('user_id', $request->input('vendedor'));
         }
         $totalItem = $clients->count();
-        $currentPage = $currentPage + 1;
         if ($currentPage == '1')
             $clients = $clients->limit($pageSize)->get();
         else
