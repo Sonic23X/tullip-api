@@ -44,7 +44,7 @@ class ClientController extends Controller
         $response = [
             'status' => true,
             'totalItem' => $totalItem,
-            'totalPage' => round($totalItem / $pageSize),
+            'totalPage' => ceil($totalItem / $pageSize),
             'pageSize' => $pageSize,
             'currentPage' => $currentPage,
             'data' => $clients->load('seller')
