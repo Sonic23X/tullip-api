@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Facade\FlareClient\Http\Client;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
@@ -30,12 +31,12 @@ class Seguimiento extends Model
 
     public function cliente()
     {
-        return $this->belongsTo('App\Models\Cliente');
+        return $this->belongsTo(Client::class);
     }
 
     public function seller()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->hasOne(User::class);
     }
 
     public function getTipoStringAttribute()
