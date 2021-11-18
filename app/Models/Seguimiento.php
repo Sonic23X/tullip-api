@@ -36,7 +36,7 @@ class Seguimiento extends Model
 
     public function seller()
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function getTipoStringAttribute()
